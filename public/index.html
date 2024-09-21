@@ -3,32 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reconnaissance vocale</title>
+  <title>API Reconnaissance Vocale</title>
 </head>
 <body>
-  <h1>Appuyer pour commencer la reconnaissance vocale</h1>
-  <button id="startButton">Démarrer la reconnaissance vocale</button>
-  <p id="transcript"></p>
-
   <script>
-    const startButton = document.getElementById('startButton');
-    const transcriptElement = document.getElementById('transcript');
-
     if ('webkitSpeechRecognition' in window) {
       const recognition = new webkitSpeechRecognition();
-      recognition.lang = 'fr-FR';  // Langue française
+      recognition.lang = 'fr-FR';
       recognition.continuous = false;
       recognition.interimResults = false;
 
-      startButton.addEventListener('click', () => {
-        recognition.start();
-      });
+      recognition.start();  // Démarrer la reconnaissance vocale automatiquement
 
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
-        transcriptElement.innerText = `Texte reconnu : ${transcript}`;
 
-        // Envoyer le texte à FiveM via NUI callback ou PerformHttpRequest
+        // Envoyer le texte à FiveM via NUI
         fetch(`https://${GetParentResourceName()}/speechResult`, {
           method: 'POST',
           headers: {
@@ -42,7 +32,7 @@
         console.error('Erreur de reconnaissance vocale:', event.error);
       };
     } else {
-      alert("Votre navigateur ne supporte pas la reconnaissance vocale.");
+      alert("Votre navigateur ne supporte pas l'API Web Speech.");
     }
   </script>
 </body>
